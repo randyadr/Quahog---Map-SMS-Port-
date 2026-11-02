@@ -1,0 +1,133 @@
+{
+  "version": "0.4.0",
+  "author": "Randyadr",
+  "source": "Skin Selector 2.14.165 actual meshes",
+  "quahog_triangles": 480961,
+  "quahog_chunks": 2675,
+  "quahog_textures": 58,
+  "collision": [
+    {
+      "file": "quahog_00.col",
+      "vertices": 32760,
+      "triangles": 71459,
+      "bytes": 964928
+    },
+    {
+      "file": "quahog_01.col",
+      "vertices": 32758,
+      "triangles": 111921,
+      "bytes": 1288608
+    },
+    {
+      "file": "quahog_02.col",
+      "vertices": 32760,
+      "triangles": 101469,
+      "bytes": 1205024
+    },
+    {
+      "file": "quahog_03.col",
+      "vertices": 32759,
+      "triangles": 108751,
+      "bytes": 1263264
+    },
+    {
+      "file": "quahog_04.col",
+      "vertices": 32760,
+      "triangles": 86456,
+      "bytes": 1084896
+    },
+    {
+      "file": "quahog_05.col",
+      "vertices": 32759,
+      "triangles": 79388,
+      "bytes": 1028352
+    },
+    {
+      "file": "quahog_06.col",
+      "vertices": 32760,
+      "triangles": 86101,
+      "bytes": 1082080
+    },
+    {
+      "file": "quahog_07.col",
+      "vertices": 32758,
+      "triangles": 82326,
+      "bytes": 1051840
+    },
+    {
+      "file": "quahog_08.col",
+      "vertices": 32760,
+      "triangles": 79742,
+      "bytes": 1031200
+    },
+    {
+      "file": "quahog_09.col",
+      "vertices": 23971,
+      "triangles": 57462,
+      "bytes": 747456
+    }
+  ],
+  "spawn": [
+    -157.27223205566406,
+    8002.333984375,
+    -317.7065124511719
+  ],
+  "return_portal": [
+    -157.27223205566406,
+    7995.333984375,
+    -892.70654296875
+  ],
+  "native_format": "J3D2bmd3 + Sunshine COL; no custom world renderer",
+  "features": "Independent native map, animated visible portals, saved placement and return travel. Missions/NPCs are not migrated.",
+  "files": {
+    "collision_stub.bmd": {
+      "size": 3040,
+      "sha256": "2eea9f4b478ba8c72652383edc3650d33e8ae1d01e49d6ce09479571fe59f348"
+    },
+    "quahog.bmd": {
+      "size": 49118528,
+      "sha256": "7e00b8f12a79ceebd7eaa92c4b3b5b377ce938354374a15c0daa424e4b612c66"
+    },
+    "quahog_00.col": {
+      "size": 964928,
+      "sha256": "7a860fd5e4be23c85c3c22d45b4ac70a3da9a28328994f845f7b6d8e751375d6"
+    },
+    "quahog_01.col": {
+      "size": 1288608,
+      "sha256": "569dc5f469b5e775d4f9b2173bea449ba582ec3a0355119f58d121a47e0d0f82"
+    },
+    "quahog_02.col": {
+      "size": 1205024,
+      "sha256": "ca75881832d1f24c8bd76f3f502d47d89b34d8e8a195bcbeaea10786a888769a"
+    },
+    "quahog_03.col": {
+      "size": 1263264,
+      "sha256": "625657835ff46345a11da6554916488aba3b0bdbf7441661a9f8a219963d3c59"
+    },
+    "quahog_04.col": {
+      "size": 1084896,
+      "sha256": "6898b7a39a6c4188556312d8f5e6969b62a1bb9625dcd22d7c95a09836102251"
+    },
+    "quahog_05.col": {
+      "size": 1028352,
+      "sha256": "eea731cebc2ede0f96360d55e92239038b87f19f3f3d2954e0e81799d3df1b10"
+    },
+    "quahog_06.col": {
+      "size": 1082080,
+      "sha256": "0f61b9b6bc2c274a5031b91d63876402919634e4d43c5af5677ab155d192b4d6"
+    },
+    "quahog_07.col": {
+      "size": 1051840,
+      "sha256": "e5c7deb1b7684ac76c7282e20c0a20673c9671ac98e8b618d51c7a0d02656c7c"
+    },
+    "quahog_08.col": {
+      "size": 1031200,
+      "sha256": "7c28340c8f70e1446fc26f1ab33197255120ee146847d48d47841d06f6e2b553"
+    },
+    "quahog_09.col": {
+      "size": 747456,
+      "sha256": "c1eb7c2b0b2fbd7ce1fbe9a9347e2954b2b37533bb53e257df14790ef6e87c35"
+    }
+  },
+  "mode": "quahog"
+}

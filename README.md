@@ -2,7 +2,7 @@
 
 A standalone Quahog map mod for the Windows x64 Super Mario Sunshine PC port / SMS Launcher. By **Randyadr**.
 
-**Version 0.4.4.** The ZIP includes the native DLL, map assets, complete mod source, setup scripts, offline tests, and third-party licenses.
+**Version 0.4.4.** Source code, setup scripts, SDK headers, offline tests, build instructions, and third-party licenses are available as normal files in this repository. The install ZIP includes the same source plus the native DLL and map assets.
 
 ## Download
 
@@ -38,7 +38,24 @@ The preview is rendered by the actual portal drawing code with an offline camera
 
 ## Build and checks
 
-The ZIP contains `quahog-native/BUILD.txt` with the Zig 0.13.0 Windows DLL command. After extracting the ZIP, run offline checks from the mod directory:
+Browse the [C++ source](quahog-native/src), [Python tools](quahog-native/tools), [tests](quahog-native/tests), and [build command](quahog-native/BUILD.txt) directly on GitHub.
+
+To work from a clone or GitHub's **Code → Download ZIP**, first restore the binary map assets and packaged DLL from the included install archive:
+
+```sh
+python prepare_checkout.py
+```
+
+This checks the v0.4.4 archive's SHA-256 and extracts only the map binaries and DLL. It preserves source edits, needs no network access, and does not install dependencies. To restore those packaged binaries again, rerun the command.
+
+To build a modified DLL, install Zig 0.13.0, enter `quahog-native`, and run the command in `BUILD.txt`. Python 3.10+ and a host `g++` compiler are needed for the offline checks:
+
+```sh
+cd quahog-native
+zig c++ -target x86_64-windows-gnu -std=c++17 -O2 -Wall -Wextra -Werror -shared -Isdk src/quahog_native.cpp -luser32 -ladvapi32 -lversion -lwinhttp -lbcrypt -lwintrust -lgdi32 -o bin/windows-x86_64/quahog_native.dll
+```
+
+Run the checks from the mod directory:
 
 ```sh
 cd quahog-native
@@ -49,7 +66,7 @@ This release was rebuilt with warnings treated as errors. All 38 Python tests an
 
 ## Details and credits
 
-Included inside the ZIP's `quahog-native` folder:
+Available in the repository's [`quahog-native`](quahog-native) folder and inside the install ZIP:
 
 - `README.txt` — installation, setup, compatibility and troubleshooting
 - `CHANGELOG.txt` — version history

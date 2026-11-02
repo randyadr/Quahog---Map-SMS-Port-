@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.pdb
+*.lib
+.zig-cache/
+zig-out/
+
+# Binary payloads are restored from Quahog_Mod_v0.4.4.zip.
+quahog-native/assets/*.bmd
+quahog-native/assets/*.col
+quahog-native/bin/

@@ -1,0 +1,5 @@
+Windows DLL (Zig 0.13.0):
+zig c++ -target x86_64-windows-gnu -std=c++17 -O2 -Wall -Wextra -Werror -shared -Isdk src/quahog_native.cpp -luser32 -ladvapi32 -lversion -lwinhttp -lbcrypt -lwintrust -lgdi32 -o bin/windows-x86_64/quahog_native.dll
+
+Offline checks (Python 3.10+ and g++):
+python tests/run_checks.py

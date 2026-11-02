@@ -1,0 +1,63 @@
+[Native map] First-use preparation for Eclipse. Please wait...
+[Native map] Maps ready. Starting the game.
+[Native map] First-use preparation for Eclipse. Please wait...
+[Native map] Maps ready. Starting the game.
+[Native map] First-use preparation for Eclipse. Please wait...
+[Native map] Maps ready. Starting the game.
+[Native map] First-use preparation for Eclipse. Please wait...
+[Native map] First-use preparation for Eclipse. Please wait...
+[Native map] Maps ready. Starting the game.
+[Native map] Prepared maps are up to date.
+[Native map] First-use preparation for Eclipse. Please wait...
+[Native map] Maps ready. Starting the game.
+[Native map] First-use preparation for Eclipse. Please wait...
+[Native map] Maps ready. Starting the game.
+[Native map] Quahog scaffold: scene structure diagnostic
+[Native map] First-use preparation for Eclipse. Please wait...
+[Native map] Maps ready. Starting the game.
+[Native map] First-use preparation for Sunshine. Please wait...
+[Native map] Maps ready. Starting the game.
+[Native map] First-use preparation for Eclipse. Please wait...
+[Native map] Stage table: root=NameRefGrp, selected=ScenarioArchiveNamesInStage, areas=80
+[Native map] Quahog target: area=23, episode=1, archive=dolpic_ex0.arc
+[Native map] Preparing native Quahog in existing stage data/scene/dolpic_ex0.szs
+[Native map] Quahog scaffold scene: root=GroupObj, records=9, types=AmbAry:1,GroupObj:1,IdxGroup:1,LightAry:1,Map:1,MapObjManager:1,MarScene:1,SmJ3DScn:1,Strategy:1
+[Native map] Verifying prepared archive: maps/quahog.arc
+[Native map] Portal location scan: Expected one /map/map.col, found []
+[Native map] Portal location scan: Expected one /map/map.col, found []
+[Native map] Market wall not resolved; use F1 > Quahog > Place portal here at the marked wall. Direct travel remains available.
+[Native map] Maps ready. Starting the game.
+[Native map] Prepared maps are up to date.
+[Native map] First-use preparation for Sunshine. Please wait...
+[Native map] Stage table: root=ScenarioArchiveNamesInStage, selected=ScenarioArchiveNamesInStage, areas=80
+[Native map] Quahog target: area=23, episode=1, archive=dolpic_ex0.arc
+[Native map] Preparing native Quahog in existing stage data/scene/dolpic_ex0.szs
+[Native map] Quahog scaffold scene: root=GroupObj, records=9, types=AmbAry:1,GroupObj:1,IdxGroup:1,LightAry:1,Map:1,MapObjManager:1,MarScene:1,SmJ3DScn:1,Strategy:1
+[Native map] Verifying prepared archive: maps/quahog.arc
+[Native map] Portal location scan: Expected one /map/map.col, found []
+[Native map] Portal location scan: Expected one /map/map.col, found []
+[Native map] Market wall not resolved; use F1 > Quahog > Place portal here at the marked wall. Direct travel remains available.
+[Native map] Maps ready. Starting the game.
+[Native map] Prepared maps are up to date.
+[Native map] First-use preparation for Eclipse. Please wait...
+[Native map] Stage table: root=NameRefGrp, selected=ScenarioArchiveNamesInStage, areas=80
+[Native map] Quahog target: area=23, episode=1, archive=dolpic_ex0.arc
+[Native map] Preparing native Quahog in existing stage data/scene/dolpic_ex0.szs
+[Native map] Quahog scaffold scene: root=GroupObj, records=9, types=AmbAry:1,GroupObj:1,IdxGroup:1,LightAry:1,Map:1,MapObjManager:1,MarScene:1,SmJ3DScn:1,Strategy:1
+[Native map] Verifying prepared archive: maps/quahog.arc
+[Native map] Portal location scan: Expected one /map/map.col, found []
+[Native map] Portal location scan: Expected one /map/map.col, found []
+[Native map] Market wall not resolved; use F1 > Quahog > Place portal here at the marked wall. Direct travel remains available.
+[Native map] Maps ready. Starting the game.
+----------------------------------------------------------------------
+Ran 38 tests in 0.921s
+
+OK
+Quahog: travel, render callbacks, saved placement, pause/debounce, profile isolation, return, optional APIs and rollback passed.
+VFS tests passed: activation, repeat toggles, lifetime, corrupt map, ISO mismatch, low memory, partial-failure rollback, path safety.
+PE resolver tests passed: exact section RVAs, data symbols, missing names, malformed executable, auxiliary records.
+Startup policy passed: memory thresholds, settings preservation, duplicates, BOM, invalid data, exact path precedence, argument quoting.
+Installed Python policy: passed
+Automatic Python setup: reuse, lock/recheck, verification gate, install, cancellation, failure, rediscovery and restart policies passed
+Actual SDK 1.3 host tests passed: Sunshine/Eclipse state, no new events or player functions, portal, return placement, rescue, unload.
+Actual SDK 1.4 host tests passed: Sunshine/Eclipse state, no new events or player functions, portal, return placement, rescue, unload.
