@@ -1,49 +1,22 @@
-Quahog 0.4.4 - Standalone release
-- Removed unused alternate-map code, preparation paths and documentation.
-- Quahog-only portal preview, tests and rebuilt native DLL.
-- Retains automatic Python setup, map assets, travel keys and portal placement.
+0.5.1 - Large executable compatibility
+- Fixed "Invalid file size" when reading a large Skin Selector game EXE.
+- Use read-only mapped executable metadata with GetFileSizeEx on Windows,
+  instead of the bounded asset reader and its 256 MB limit.
+- Executable mapping resources are closed on success and on load failure.
+- Added sparse 300 MiB and 3 GiB executable tests, including symbol tables
+  beyond 2 GiB, normal/corrupt files, arena transfer and error cleanup.
+- Remains entirely native C with no Python or installer dependency.
 
-Quahog 0.4.3 - Automatic Python setup
-- Reuses installed compatible x64 Python; installs automatically when none is detected.
-- Downloads the official Python 3.14.10 installer from python.org over HTTPS.
-- Requires the pinned official SHA-256 and Windows signature checks to pass.
-- Visible per-user installation with no setup choices or Enter key required.
-- Continues map preparation after installation without restarting the game.
-- Serializes concurrent Quahog installs and rechecks after acquiring the lock.
-- Handles cancellation, offline failure, corrupt downloads and installer errors.
-- Checks Windows version resources to skip unsupported automatic candidates.
-- No Python EXEs, runtime files or installer are bundled in the ZIP.
-- Existing memory-setting behavior, maps, portals and travel are retained.
-
-Quahog 0.4.2 - Installed Python edition
-- Separate distribution requiring installed 64-bit Python 3.10 or newer.
-- Removed the entire embedded runtime: no EXE, PYD or Python runtime DLL files.
-- Detects registered installed Python first, then real interpreter files on PATH.
-- Optional one-line python-path.txt selects a custom external interpreter.
-- Rejects missing, empty-alias, x86 and mod-local executables before launch.
-- Validates the actual Python version/bitness and logs the interpreter path.
-- Retains visible preparation and the v0.4.1 manual memory-setting restart.
-- Map assets, portal rendering, portal placement and game travel are unchanged.
-- No Python download/install, pip, new installer, launcher EXE or patcher.
-- Full ZIP only: remove the old runtime folder when updating an existing copy.
-
-Quahog 0.4.1 - Startup cleanup
-- Removed automatic game self-relaunch and window hiding.
-- Removed suspended child creation, thread resumption, process jobs and forced
-  process termination from the mod's startup code.
-- Preparation runs in a normal visible console without inherited handles.
-- Console output and failures still go to automatic-setup.log/startup.log.
-- Low memory uses the game's normal settings file, backed up before updating
-  SMS_MEM_MB only. Close the game and press Play again once after the prompt.
-- Existing map caches, assets, portal settings, travel and hotkeys retained.
-- Official bundled runtime unchanged; custom DLL remains unsigned.
-- Defender result unknown. No antivirus exclusions or bypasses added.
-
-Quahog 0.4.0
-- Independent launcher identity, assets, cache and DLL.
-- Overrides only the Quahog stage archive.
-- Animated visible portal renderer; two-sided, filled rings and swirls.
-- Portal position shared by rendering and travel, saved placement in F1.
-- Market wall scan for the Quahog entrance.
-- F6/F8/F10 travel and rescue keys; F2-F5 untouched.
-- F1 travel queues until unpaused; return and placement cooldowns.
+0.5.0 - Native C
+- Replaced every Python preparation/archive/placement step with native C11.
+- Converted the C++ DLL implementation to C11 as well.
+- Removed interpreter discovery, automatic Python installation, networking,
+  process launch, Python scripts and unused C++ runtime libraries.
+- Read the active stage through the game's existing native VFS.
+- Preserved the Quahog assets, visible portals, controls, saved placements,
+  return-episode behavior, collision, fall rescue and memory-setting handling.
+- Added atomic native cache publication and damaged-cache rebuilding.
+- Kept all preparation at startup, with no normal gameplay filesystem polling.
+- Kept complete C source and authored offline tests beside the compiled DLL.
+- This release rebuilds prepared maps once into prepared-c-v5; old caches are
+  not imported. Existing custom portal positions continue to work.

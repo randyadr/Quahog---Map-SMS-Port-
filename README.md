@@ -1,79 +1,73 @@
-# Quahog Mod
+# Quahog Mod — Native C
 
 A standalone Quahog map mod for the Windows x64 Super Mario Sunshine PC port / SMS Launcher. By **Randyadr**.
 
-**Version 0.4.4.** Source code, setup scripts, SDK headers, offline tests, build instructions, and third-party licenses are available as normal files in this repository. The install ZIP includes the same source plus the native DLL and map assets.
+**Current version: 0.5.1.** The mod and map preparation are written in C11. Python, a Python installer, and an internet connection are no longer required. This update also fixes the **“Invalid file size”** startup error when inspecting large Skin Selector `sms.exe` builds.
 
 ## Download
 
-[**Download Quahog Mod v0.4.4**](https://github.com/randyadr/Quahog---Map-SMS-Port-/raw/refs/heads/main/Quahog_Mod_v0.4.4.zip)
+[**Download Quahog Mod v0.5.1 — Native C + large EXE fix**](https://github.com/randyadr/Quahog---Map-SMS-Port-/raw/refs/heads/main/Quahog_Mod_v0.5.1_Native_C_EXE_Fix.zip)
 
-Extract the ZIP before installing. [SHA-256 checksum](SHA256SUMS.txt).
+The ZIP contains the compiled Windows x64 DLL, map assets, full C source, SDK headers, and offline tests. Use this install ZIP for the current version; the older **0.4.4** entry in Releases uses the previous Python setup. [SHA-256 checksum](SHA256SUMS.txt).
 
-## Install
+## Install or update
 
-1. Close the game. In SMS Launcher, open **Settings → Mods → Open mods folder**.
-2. Copy the `quahog-native` folder into that Mods folder.
-3. Enable **Quahog**, then press Play.
-4. If map memory needs increasing, follow the startup message and restart the game once.
+1. Close the game and extract the ZIP.
+2. In SMS Launcher, open **Settings → Mods → Open mods folder**.
+3. Copy the extracted `quahog-native` folder into Mods. Merge folders and replace files when updating. Keep your existing `data` folder and saved `quahog-portal.txt` placement.
+4. Enable **Quahog**, then press Play. Enable only one Quahog copy at a time.
+5. If startup asks for a memory-setting restart, close the game and press Play once more.
 
-When upgrading an older installation, remove its old `quahog-native/runtime` folder before copying these files. Keep any custom `python-path.txt` and your mod data. Enable only one Quahog edition at a time.
+The old mod-local `tools/`, `runtime/`, Python setup files, and C++ sources are no longer used. They may be removed from an older installation. Shared Python installations are unaffected. No compiler or extra setup is needed to play.
 
-Compatible installed x64 Python 3.10+ is reused. If it is missing, the mod downloads and verifies the official Python installer, installs it for the current Windows user, then continues map preparation. Internet is needed for that first installation. No Python runtime or installer EXE is bundled.
+## What changed
+
+- All plugin and map-preparation logic now runs as compiled C11 in `quahog_native.dll`.
+- No Python installation, downloads, helper processes, or preparation activity during ordinary gameplay.
+- Large game executables are inspected through a read-only file mapping with a 64-bit file size. The map-asset size cap no longer rejects large Skin Selector executables.
+- Map geometry, textures, and collision assets are unchanged from the supplied v0.4.3 package.
+
+The game executable and ISO are not modified. See the [changelog](quahog-native/CHANGELOG.txt) and [installation and troubleshooting guide](quahog-native/README.txt).
 
 ## Controls
 
 | Control | Action |
 | --- | --- |
 | F6 | Enter Quahog from Delfino Plaza |
-| F8 | Return to Plaza |
+| F8 | Return to the Plaza episode you entered from |
 | F10 | Rescue to the Quahog entrance |
 | F1 → Mods → Quahog → Place portal here | Save the portal at your current Plaza position |
 
-Walking through the cyan portals also travels between the maps. Automatic entrance placement searches the market wall between the coconut and papaya stalls; manual placement is available if that scan cannot resolve the location.
+Walking through the cyan portals also travels between the maps. Automatic placement searches the coconut/papaya market gap and nearby collision. Saved placement takes priority; manual placement and F6 remain available when the scan cannot resolve a position.
 
-![Quahog portal drawing preview](Preview.svg)
+![Quahog portal drawing preview](quahog-native/Preview.png)
 
-The preview is rendered by the actual portal drawing code with an offline camera. It is not an in-game screenshot.
+This is the original offline portal rendering, not an in-game screenshot.
 
-## Build and checks
+## Source, building, and tests
 
-Browse the [C++ source](quahog-native/src), [Python tools](quahog-native/tools), [tests](quahog-native/tests), and [build command](quahog-native/BUILD.txt) directly on GitHub.
+Browse the [C source](quahog-native/src), [SDK](quahog-native/sdk), [tests](quahog-native/tests), and [build instructions](quahog-native/BUILD.txt) directly on GitHub. There are no Python or C++ source files in the current checkout or install ZIP.
 
-To work from a clone or GitHub's **Code → Download ZIP**, first restore the binary map assets and packaged DLL from the included install archive:
+The large map binaries are stored in the install ZIP. After cloning or using **Code → Download ZIP**, extract the included `Quahog_Mod_v0.5.1_Native_C_EXE_Fix.zip` into a separate temporary folder. Copy only its `quahog-native/assets` folder into the checkout's `quahog-native` folder. This restores the assets without replacing source edits. The compiled DLL and synthetic test fixtures are already present as normal repository files. No Python checkout helper is needed.
 
-```sh
-python prepare_checkout.py
-```
-
-This checks the v0.4.4 archive's SHA-256 and extracts only the map binaries and DLL. It preserves source edits, needs no network access, and does not install dependencies. To restore those packaged binaries again, rerun the command.
-
-To build a modified DLL, install Zig 0.13.0, enter `quahog-native`, and run the command in `BUILD.txt`. Python 3.10+ and a host `g++` compiler are needed for the offline checks:
+To rebuild with Zig 0.13.0, open `quahog-native` and run `BUILD_WINDOWS.cmd` on Windows, or:
 
 ```sh
-cd quahog-native
-zig c++ -target x86_64-windows-gnu -std=c++17 -O2 -Wall -Wextra -Werror -shared -Isdk src/quahog_native.cpp -luser32 -ladvapi32 -lversion -lwinhttp -lbcrypt -lwintrust -lgdi32 -o bin/windows-x86_64/quahog_native.dll
+zig cc -target x86_64-windows-gnu -std=c11 -O2 -Wall -Wextra -Werror -shared -Isdk src/quahog_native.c src/qcore.c src/qformats.c src/qhost.c -luser32 -o bin/windows-x86_64/quahog_native.dll
 ```
 
-Run the checks from the mod directory:
+Run the offline tests from `quahog-native` on Linux with a C compiler:
 
 ```sh
-cd quahog-native
-python tests/run_checks.py
+sh tests/run_checks.sh
 ```
 
-This release was rebuilt with warnings treated as errors. All 38 Python tests and eight C++ suites passed, including SDK 1.3/1.4 address/undefined-behavior sanitizer checks. The map assets are byte-for-byte unchanged from v0.4.3. Windows execution and in-game behavior were not tested for this release.
+The Windows x64 DLL compiled with warnings treated as errors. Native tests passed for format parsing, hashing, cache repair, portal behavior, and simulated host APIs 1.3, 1.4, and 1.5. Sparse executable tests passed at 300 MiB and 3 GiB, including symbol tables beyond 2 GiB. Memory and bounds checks passed on the tested paths. See [VALIDATION.json](quahog-native/VALIDATION.json) and [test results](quahog-native/tests/last-checks.log).
 
-## Details and credits
+**This is a test release:** actual Windows game execution and Windows file operations have not been tested here. The DLL is unsigned; Defender has not been tested.
 
-Available in the repository's [`quahog-native`](quahog-native) folder and inside the install ZIP:
+## Compatibility and credits
 
-- `README.txt` — installation, setup, compatibility and troubleshooting
-- `CHANGELOG.txt` — version history
-- `SECURITY_NOTES.txt` — security and Python setup details
-- `VALIDATION.json` — build and offline validation record
-- `licenses/` — third-party licenses
+Requires a compatible user-supplied Sunshine/Eclipse game, Windows x64 native mod API 1.x, and the host symbols listed in the [mod README](quahog-native/README.txt). Single-player only. This map build does not add the old custom missions, NPCs, dialogue, or Shine rewards.
 
-Requires a compatible user-supplied Sunshine GMSE01 or Eclipse GMSE04 disc. The game executable and ISO are not modified. Single-player only. This map build does not include the old custom missions, NPCs, dialogue or Shine rewards.
-
-Converted world assets originate from the supplied Skin Selector 2.14.165 assets. Third-party asset ownership is not claimed. Mod work and integration: Randyadr.
+Converted world assets originate from the supplied Skin Selector 2.14.165 assets. Third-party asset ownership is not claimed. SDK and compiler-library licenses are retained in [licenses](quahog-native/licenses). Mod work and integration: Randyadr.

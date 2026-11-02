@@ -1,5 +1,46 @@
-Windows DLL (Zig 0.13.0):
-zig c++ -target x86_64-windows-gnu -std=c++17 -O2 -Wall -Wextra -Werror -shared -Isdk src/quahog_native.cpp -luser32 -ladvapi32 -lversion -lwinhttp -lbcrypt -lwintrust -lgdi32 -o bin/windows-x86_64/quahog_native.dll
+QUAHOG 0.5.1 - C11 SOURCE BUILD
 
-Offline checks (Python 3.10+ and g++):
-python tests/run_checks.py
+Players: the Windows x64 DLL is already compiled. No compiler, Python, extra
+runtime installation or internet connection is needed to use the mod.
+
+Rebuild from this folder with Zig 0.13.0:
+zig cc -target x86_64-windows-gnu -std=c11 -O2 -Wall -Wextra -Werror -shared -Isdk src/quahog_native.c src/qcore.c src/qformats.c src/qhost.c -luser32 -o bin/windows-x86_64/quahog_native.dll
+
+On Windows, BUILD_WINDOWS.cmd runs the same command. All executable mod logic
+is C11. The bundled game SDK is a C-compatible API header. No C++ is compiled.
+The build scripts only invoke the compiler; they are not used during gameplay.
+
+Offline tests on Linux with GCC:
+sh tests/run_checks.sh
+Or with Zig:
+CC="/path/to/zig cc" sh tests/run_checks.sh
+
+The test script explicitly keeps assertions enabled even with optimization.
+The fixtures are synthetic authored test scenes, archives and PE metadata.
+They are not extracted game data. Tests require the included real mod assets.
+The reference archive hash was independently produced by the previous Python
+assembler during development, and the C output was compared byte for byte.
+No Python code is required or included in this release.
+
+Optional memory/bounds checks:
+gcc -std=c11 -O1 -g -UNDEBUG -fsanitize=address,undefined -fno-omit-frame-pointer -Isrc tests/test_core.c src/qcore.c src/qformats.c src/qhost.c -lm -o /tmp/quahog-core-asan
+/tmp/quahog-core-asan tests/fixtures assets
+
+Source map:
+  quahog_native.c  Game API, portal travel, placement persistence and events.
+  qportal.h        Native projected portal drawing.
+  qformats.c      Scene parser, RARC/Yaz0, stage selection, map assembly,
+                  asset verification and collision-derived portal placement.
+  qhost.c         PE/COFF lookup, host VFS, cache, original-data retention,
+                  memory-settings compatibility and override restoration.
+  qcore.c/.h      Bounded allocations, SHA-256, byte IO and UTF-8 file handling.
+  asset_hashes.h  Pinned release asset sizes and SHA-256 checksums.
+
+When intentionally changing assets, regenerate their entries in asset_hashes.h
+and assets/assets.json and bump Q_VERSION to invalidate prepared archives.
+
+Large executable regression (included in run_checks.sh):
+gcc -std=c11 -O2 -UNDEBUG -Wall -Wextra -Werror -Isrc tests/test_large_pe.c src/qcore.c src/qformats.c src/qhost.c -lm -o /tmp/quahog-large-pe
+/tmp/quahog-large-pe /tmp
+This creates then deletes sparse authored test files. It does not need a game
+EXE and does not write 3 GiB of real data. The production mapping is read-only.

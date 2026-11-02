@@ -1,11 +1,13 @@
-__pycache__/
-*.pyc
+*.o
+*.obj
 *.pdb
 *.lib
 .zig-cache/
 zig-out/
 
-# Binary payloads are restored from Quahog_Mod_v0.4.4.zip.
+# Large map binaries are restored from the included v0.5.1 install ZIP.
 quahog-native/assets/*.bmd
 quahog-native/assets/*.col
-quahog-native/bin/
+
+# Local game/cache data is not release source.
+quahog-native/data/

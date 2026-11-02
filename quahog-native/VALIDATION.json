@@ -1,36 +1,51 @@
 {
-  "version": "0.4.4",
-  "profile": "quahog",
-  "edition": "standalone",
-  "python_tests_passed": 38,
-  "cpp_suites": [
-    "quahog portal",
-    "VFS overrides",
-    "PE resolver",
-    "memory settings and path policy",
-    "installed Python path/version/PE policy",
-    "automatic Python install state machine",
-    "SDK 1.3 ASan/UBSan",
-    "SDK 1.4 ASan/UBSan"
+  "version": "0.5.1",
+  "windows_x64_c11_build": "passed; warnings treated as errors",
+  "source_assets_unchanged_from": "supplied Quahog v0.4.3",
+  "python_or_cpp_files_in_package": 0,
+  "offline_tests": {
+    "gcc_c11": "passed",
+    "reference_assembler_byte_comparison": "passed",
+    "reference_archive_sha256": "eba9820614a5e9ec6c44e966994354bdd73352e04ae1fcf97563568a6b2daaa0",
+    "sha256_known_vectors": "passed",
+    "memory_setting_text": "passed",
+    "pe_coff_symbol_lookup": "passed",
+    "scene_rarc_yaz0_stage_table": "passed",
+    "collision_market_placement": "passed",
+    "parser_mutations": 800,
+    "host_api_1_3": "passed",
+    "host_api_1_4": "passed",
+    "host_api_1_5": "passed",
+    "cache_reuse_and_corruption_rebuild": "passed",
+    "missing_assets_prevent_activation": "passed",
+    "unload_and_subscribe_failure_rollback": "passed",
+    "normal_gameplay_background_file_reads": 0,
+    "address_and_undefined_behavior_sanitizers": "v0.5.0 core/runtime checks retained; v0.5.1 changed mapping and ownership paths passed ASan/UBSan. Full native regression suite rerun on v0.5.1.",
+    "large_executable_mapping": {
+      "file_sizes_bytes": [
+        4096,
+        314576896,
+        3221229568
+      ],
+      "coff_offsets": [
+        600,
+        314572800,
+        3221225472
+      ],
+      "heap_per_mapping": "<4 KiB",
+      "reproduced_old_reader_limit": true,
+      "far_symbol_lookup": "passed",
+      "map_ownership_transfer": "passed",
+      "failed_parse_and_open_cleanup": "passed",
+      "asan_ubsan": "passed; LeakSanitizer disabled due sandbox restrictions"
+    }
+  },
+  "limits": [
+    "No real game/ISO playtest",
+    "Windows runtime/file operations not executed",
+    "Defender not tested",
+    "Unsigned DLL"
   ],
-  "windows_dll_compiled": true,
-  "old_startup_imports_removed_and_checked": true,
-  "external_interpreter_cli_preparation_and_cache_tested": true,
-  "external_interpreter_test_platform": "Linux x64; authored miniature Eclipse disc; isolated Python subprocess",
-  "bundled_python": false,
-  "automatic_python_install": true,
-  "official_installer_download_hash_verified": false,
-  "windows_installer_execution_tested": false,
-  "windows_authenticode_execution_tested": false,
-  "minimum_python": "3.10 x64",
-  "defender_scan_performed": false,
-  "original_detection_identified": false,
-  "windows_python_discovery_tested": false,
-  "windows_startup_tested": false,
-  "windows_memory_file_transaction_tested": false,
-  "gameplay_tested": false,
-  "portal_rendering_unchanged": true,
-  "assets_unchanged_from_0_4_1": true,
-  "installer_pin_unchanged_from_0_4_3": true,
-  "windows_dll_exports_verified": true
+  "notes": "Test fixture data is authored, not extracted retail game content. The compiled DLL and all mod/preparation logic are C11.",
+  "fix": "Do not send the game EXE through the 256 MiB asset reader. Use a read-only mapped view with 64-bit size and automatic error cleanup."
 }
