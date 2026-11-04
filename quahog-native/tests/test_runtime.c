@@ -15,8 +15,25 @@
 struct SmsMod {
     int unused;
 };
+#ifdef QUAHOG_DYNAMIC_TEST
+#include <dlfcn.h>
+static int (*sms_mod_load)(SmsMod *, const SmsApi *);
+static void (*sms_mod_unload)(SmsMod *);
+static void *plugin_handle;
+static const char *plugin_path;
+static void open_plugin(void) {
+    plugin_handle = dlopen(plugin_path, RTLD_NOW | RTLD_LOCAL);
+    if (!plugin_handle) { fprintf(stderr, "%s\n", dlerror()); abort(); }
+    sms_mod_load = (int (*)(SmsMod *, const SmsApi *))dlsym(plugin_handle, "sms_mod_load");
+    sms_mod_unload = (void (*)(SmsMod *))dlsym(plugin_handle, "sms_mod_unload");
+    assert(sms_mod_load && sms_mod_unload);
+    uint32_t (*version)(void) = (uint32_t (*)(void))dlsym(plugin_handle, "sms_mod_api_version");
+    assert(version && version() == (1u << 16));
+}
+#else
 extern int sms_mod_load(SmsMod *, const SmsApi *);
 extern void sms_mod_unload(SmsMod *);
+#endif
 static char game_folder[Q_PATH], mod_folder[Q_PATH], data_folder[Q_PATH];
 static SmsMod mod;
 static SmsEventFn callbacks[256];
@@ -26,7 +43,12 @@ static SmsGameState state;
 static SmsPlayer player;
 static int warps, requested_area, requested_episode, markers = 1, fail_event, triangles, lines,
                                                      reads, overrides;
+#ifdef QUAHOG_DYNAMIC_TEST
+uint32_t port_mem1_size = 64u * 1024 * 1024;
+#define memory_size port_mem1_size
+#else
 static uint32_t memory_size = 64u * 1024 * 1024;
+#endif
 static const void *mapped;
 static uint32_t mapped_size;
 static const char *target = "/data/scene/dolpic_ex0.szs";
@@ -61,6 +83,10 @@ static int replace_game(const char *path, const void *p, uint32_t n) {
     return 1;
 }
 QHost quahog_test_host(void) { return (QHost){read_game, replace_game, free, &memory_size}; }
+#ifdef QUAHOG_DYNAMIC_TEST
+void *port_dvd_read_file(const char *path, size_t *size) { return read_game(path, size); }
+int port_dvd_override(const char *path, const void *p, uint32_t n) { return replace_game(path, p, n); }
+#endif
 static int subscribe(SmsMod *m, unsigned t, SmsEventFn fn, void *u, int priority) {
     (void)m;
     (void)u;
@@ -221,9 +247,22 @@ static void unload(void) {
     noptions = 0;
     for (int i = 0; i < 256; i++)
         assert(!callbacks[i]);
+#ifdef QUAHOG_DYNAMIC_TEST
+    assert(!dlclose(plugin_handle));
+    open_plugin();
+#endif
 }
 int main(int argc, char **argv) {
+#ifdef QUAHOG_DYNAMIC_TEST
+    assert(argc == 5);
+    plugin_path = argv[4];
+    open_plugin();
+#ifdef QUAHOG_HIDDEN_HOST
+    assert(!dlsym(RTLD_MAIN_ONLY, "port_dvd_read_file"));
+#endif
+#else
     assert(argc == 4);
+#endif
     assert(strlen(argv[1]) < sizeof game_folder && strlen(argv[2]) < sizeof mod_folder &&
            strlen(argv[3]) < sizeof data_folder);
     strcpy(game_folder, argv[1]);
@@ -340,10 +379,12 @@ int main(int argc, char **argv) {
     tick(.1f);
     assert(warps == 4);
     assert(reads == count); /* No file reads during gameplay. */
+    const void *first_prepared = mapped;
     unload();
     assert(!memcmp(mapped, "Yaz0", 4));
     load_stage(1, 3);
     assert(sms_mod_load(&mod, &api) == 0);
+    assert(mapped == first_prepared); /* Registry survives actual dlclose/reopen on Mac. */
     tick(4);
     player.position = (SmsVec3){1100, 20, 2100};
     int old = warps;

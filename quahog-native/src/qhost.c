@@ -1,3 +1,9 @@
+#ifndef _WIN32
+#ifdef __APPLE__
+#define _DARWIN_C_SOURCE 1
+#endif
+#define _POSIX_C_SOURCE 200809L
+#endif
 #include "qcore.h"
 #include <ctype.h>
 #include <inttypes.h>
@@ -8,6 +14,11 @@
 #define WIN32_LEAN_AND_MEAN
 #include <wchar.h>
 #include <windows.h>
+#else
+#include <errno.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #endif
 static void pneed(QCtx *c, QBytes b, size_t p, size_t n) {
     if (p > b.n || n > b.n - p)
@@ -167,8 +178,10 @@ QHost qresolve(QCtx *c) {
         h.release = (void (*)(void *))resolve(c, b, image, "free", 1);
     return h;
 }
+#elif defined(__APPLE__)
+QHost qresolve(QCtx *c) { return qmac_host(c); }
 #else
-QHost qresolve(QCtx *c) { qfail(c, "Windows x64 is required for loading into the game"); }
+QHost qresolve(QCtx *c) { qfail(c, "This package supports Windows x64 and macOS Intel/Apple Silicon"); }
 #endif
 static char *trim(char *s) {
     while (isspace((unsigned char)*s))
@@ -231,6 +244,36 @@ int qmemory_text(QCtx *c, QBytes before, QBytes *after) {
     *after = qb_bytes(&result);
     return 1;
 }
+#ifndef _WIN32
+static int same_settings(const char *path, const struct stat *before, QBytes bytes) {
+    int fd = open(path, O_RDONLY | O_NOFOLLOW | O_NONBLOCK);
+    if (fd < 0)
+        return 0;
+    struct stat now;
+    int ok = !fstat(fd, &now) && S_ISREG(now.st_mode) && now.st_dev == before->st_dev &&
+             now.st_ino == before->st_ino && now.st_mode == before->st_mode &&
+             now.st_size >= 0 && (uint64_t)now.st_size == bytes.n;
+    size_t at = 0;
+    unsigned char buffer[4096];
+    while (ok && at < bytes.n) {
+        size_t count = bytes.n - at < sizeof buffer ? bytes.n - at : sizeof buffer;
+        ssize_t n = read(fd, buffer, count);
+        if (n < 0 && errno == EINTR)
+            continue;
+        if (n <= 0 || memcmp(buffer, bytes.p + at, (size_t)n))
+            ok = 0;
+        else
+            at += (size_t)n;
+    }
+    unsigned char extra;
+    if (ok && read(fd, &extra, 1) != 0)
+        ok = 0;
+    close(fd);
+    struct stat entry;
+    return ok && !lstat(path, &entry) && entry.st_dev == before->st_dev &&
+           entry.st_ino == before->st_ino && S_ISREG(entry.st_mode);
+}
+#endif
 int qmemory(QCtx *c, uint32_t current, int in_stage, const char *data) {
     if (current >= 512u * 1024 * 1024)
         return 0;
@@ -286,8 +329,63 @@ int qmemory(QCtx *c, uint32_t current, int in_stage, const char *data) {
           "%s\nBackup: %s",
           settings, backup);
 #else
-    (void)data;
-    qfail(c, "Game memory is below 512 MB");
+    const char *settings = getenv("SMS_SETTINGS");
+    if (!settings || !*settings) {
+        settings = qexists("settings.txt") ? "settings.txt" :
+                   qexists("../../settings.txt") ? "../../settings.txt" : NULL;
+    }
+    if (!settings)
+        qfail(c, "No active settings.txt found. Set SMS_MEM_MB = 1024 in the game's settings.txt "
+                 "and restart with Quahog enabled.");
+    if (strlen(settings) >= Q_PATH - 32)
+        qfail(c, "SMS_SETTINGS path is too long; settings left unchanged");
+    struct stat status;
+    if (lstat(settings, &status) || !S_ISREG(status.st_mode) || status.st_nlink != 1 ||
+        status.st_uid != geteuid())
+        qfail(c, "Cannot safely update game settings. Use a regular settings.txt owned by your "
+                 "account, set SMS_MEM_MB = 1024, then restart.");
+    QBytes before = qread(c, settings, 1024 * 1024, 0), after;
+    if (!qmemory_text(c, before, &after))
+        qfail(c, "Game memory is below 512 MB although settings already request enough. Close "
+                 "and reopen SMS Launcher and check the SMS_MEM_MB environment override. "
+                 "Settings unchanged.");
+    qmkdir(c, data);
+    char *backup = qfmt(c, "%s/settings-before-quahog-%016" PRIx64 ".txt", data, qfnv(before));
+    if (qexists(backup)) {
+        QBytes old = qread(c, backup, 1024 * 1024, 0);
+        if (old.n != before.n || memcmp(old.p, before.p, before.n))
+            qfail(c, "Existing settings backup differs. Settings left unchanged.");
+    } else
+        qatomic(c, backup, before);
+    char *temp = qfmt(c, "%s.quahog-XXXXXX", settings);
+    int fd = mkstemp(temp);
+    if (fd < 0)
+        qfail(c, "Cannot create settings update. Set SMS_MEM_MB = 1024 manually.");
+    int ok = !fchmod(fd, status.st_mode & 0777);
+    size_t written = 0;
+    while (ok && written < after.n) {
+        ssize_t n = write(fd, after.p + written, after.n - written);
+        if (n < 0 && errno == EINTR)
+            continue;
+        if (n <= 0)
+            ok = 0;
+        else
+            written += (size_t)n;
+    }
+    if (fsync(fd))
+        ok = 0;
+    if (close(fd))
+        ok = 0;
+    if (!ok || !same_settings(settings, &status, before)) {
+        qremove(temp);
+        qfail(c, "Settings changed or could not be written. Original settings left unchanged.");
+    }
+    if (rename(temp, settings)) {
+        qremove(temp);
+        qfail(c, "Cannot commit settings update. Set SMS_MEM_MB = 1024 manually.");
+    }
+    qfail(c, "Saved SMS_MEM_MB = 1024. Close the game and press Play once more.\nSettings: "
+             "%s\nBackup: %s", settings, backup);
 #endif
 }
 /* Process-owned original/prepared byte buffers survive F1 disable/re-enable. */
@@ -333,6 +431,9 @@ static const void *retain(QCtx *c, const char *path, QBytes b) {
         qfail(c, "Invalid process archive cache");
     }
 #else
+#if defined(__APPLE__) && !defined(QUAHOG_TEST)
+    qmac_pin(c);
+#endif
     static SavedCache storage = {0};
     SavedCache *cache = &storage;
 #endif

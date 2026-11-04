@@ -1,0 +1,37 @@
+name: macOS mod checks
+on:
+  push:
+    branches: [quahog-macos-0.6.0]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  macos:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-14
+            arch: arm64
+          - runner: macos-15-intel
+            arch: x86_64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Restore original map assets
+        run: |
+          shasum -a 256 -c SHA256SUMS.txt
+          unzip -q -o Quahog_Mod_v0.5.1_Native_C_EXE_Fix.zip 'quahog-native/assets/*'
+      - name: Native C regression tests
+        run: sh quahog-native/tests/run_checks.sh
+      - name: Build and sign Mac libraries
+        run: sh quahog-native/BUILD_MAC.sh
+      - name: Load the dylib through real dyld and exercise the plugin
+        run: sh quahog-native/tests/run_macos_dylib.sh
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: quahog-macos-${{ matrix.arch }}
+          path: quahog-native/bin/macos-${{ matrix.arch }}/quahog_native.dylib
+          if-no-files-found: error
+          retention-days: 7

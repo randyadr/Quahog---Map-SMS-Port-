@@ -7,7 +7,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
-#define Q_VERSION "0.5.1"
+#define Q_VERSION "0.6.0"
 #define Q_LIMIT (256u * 1024u * 1024u)
 #define Q_PATH 4096
 #define Q_MAP_GROUP "\x83\x7d\x83\x62\x83\x76\x83\x4f\x83\x8b\x81\x5b\x83\x76"
@@ -112,6 +112,13 @@ QStages qstages(QCtx *, QBytes);
 QBytes qbuild(QCtx *, QBytes, const char *, QBytes);
 QLocation qmarket(QCtx *, QBytes);
 uint32_t qpe_symbol(QCtx *, QBytes, const char *, int);
+/* Mach-O file lookup returns a preferred virtual address (before ASLR). */
+uint64_t qmacho_symbol(QCtx *, QBytes, uint32_t, const char *, int);
+QBytes qmacho_slice(QCtx *, QBytes, uint32_t);
+#ifdef __APPLE__
+QHost qmac_host(QCtx *);
+void qmac_pin(QCtx *);
+#endif
 QHost qresolve(QCtx *);
 int qmemory(QCtx *, uint32_t, int, const char *);
 /* Returns 1 if changed, 0 if existing setting is already sufficient. */

@@ -239,7 +239,12 @@ static float draw_time(void) {
     return (float)((double)(GetTickCount64() % 4096000) / 1000.0);
 #else
     struct timespec t;
+#ifdef __APPLE__
+    if (clock_gettime(CLOCK_MONOTONIC, &t))
+        return 0;
+#else
     timespec_get(&t, TIME_UTC);
+#endif
     return (float)fmod((double)t.tv_sec + (double)t.tv_nsec / 1e9, 4096.0);
 #endif
 }

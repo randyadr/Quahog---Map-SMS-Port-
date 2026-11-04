@@ -386,7 +386,11 @@ void qmkdir(QCtx *c, const char *path) {
     }
 #endif
     for (size_t i = 1; i <= n; i++) {
-        if (p[i] != '/' && p[i] != '\\' && p[i])
+        if (p[i] != '/' && p[i]
+#ifdef _WIN32
+            && p[i] != '\\'
+#endif
+        )
             continue;
         char saved = p[i];
         p[i] = 0;
