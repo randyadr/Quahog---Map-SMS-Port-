@@ -1,58 +1,55 @@
-Quahog 0.5.1 - large EXE startup fix
-Negative-case errors below are expected by tests.
-
 C archive matches original assembler byte-for-byte: eba9820614a5e9ec6c44e966994354bdd73352e04ae1fcf97563568a6b2daaa0
 Core checks passed: hashes, settings, scene framing, stage indices, Yaz0, RARC, market geometry, 800 mutated inputs.
-Quahog 0.5.1 - native C - API 1.5
+Quahog 0.6.0 - native C - API 1.5
 Required native API function missing: game.find_object
 
 Details: 
-Quahog 0.5.1 - native C - API 1.5
+Quahog 0.6.0 - native C - API 1.5
 Portal drawing needs draw.triangle, draw.line and camera.world_to_canvas.
 
 Details: 
-Quahog 0.5.1 - native C - API 1.5
-Game memory is below 512 MB
+Quahog 0.6.0 - native C - API 1.5
+No active settings.txt found. Set SMS_MEM_MB = 1024 in the game's settings.txt and restart with Quahog enabled.
 
-Details: /tmp/quahog-native-c-051/data-current/startup.log
-Quahog 0.5.1 - native C - API 1.5
+Details: /tmp/quahog-native-c-tests/data-current/startup.log
+Quahog 0.6.0 - native C - API 1.5
 Could not register native event handlers; original stage restored.
 
-Details: /tmp/quahog-native-c-051/data-current/startup.log
+Details: /tmp/quahog-native-c-tests/data-current/startup.log
 API 1.5: native prepare/cache, render, travel, return episode, pause, placement reload, fall rescue, no background reads and unload rollback passed (6 overrides).
-Quahog 0.5.1 - native C - API 1.3
+Quahog 0.6.0 - native C - API 1.3
 Required native API function missing: game.find_object
 
 Details: 
-Quahog 0.5.1 - native C - API 1.3
+Quahog 0.6.0 - native C - API 1.3
 Portal drawing needs draw.triangle, draw.line and camera.world_to_canvas.
 
 Details: 
-Quahog 0.5.1 - native C - API 1.3
-Game memory is below 512 MB
+Quahog 0.6.0 - native C - API 1.3
+No active settings.txt found. Set SMS_MEM_MB = 1024 in the game's settings.txt and restart with Quahog enabled.
 
-Details: /tmp/quahog-native-c-051/data-LEGACY_13/startup.log
-Quahog 0.5.1 - native C - API 1.3
+Details: /tmp/quahog-native-c-tests/data-LEGACY_13/startup.log
+Quahog 0.6.0 - native C - API 1.3
 Could not register native event handlers; original stage restored.
 
-Details: /tmp/quahog-native-c-051/data-LEGACY_13/startup.log
+Details: /tmp/quahog-native-c-tests/data-LEGACY_13/startup.log
 API 1.3: native prepare/cache, render, travel, return episode, pause, placement reload, fall rescue, no background reads and unload rollback passed (6 overrides).
-Quahog 0.5.1 - native C - API 1.4
+Quahog 0.6.0 - native C - API 1.4
 Required native API function missing: game.find_object
 
 Details: 
-Quahog 0.5.1 - native C - API 1.4
+Quahog 0.6.0 - native C - API 1.4
 Portal drawing needs draw.triangle, draw.line and camera.world_to_canvas.
 
 Details: 
-Quahog 0.5.1 - native C - API 1.4
-Game memory is below 512 MB
+Quahog 0.6.0 - native C - API 1.4
+No active settings.txt found. Set SMS_MEM_MB = 1024 in the game's settings.txt and restart with Quahog enabled.
 
-Details: /tmp/quahog-native-c-051/data-LEGACY_14/startup.log
-Quahog 0.5.1 - native C - API 1.4
+Details: /tmp/quahog-native-c-tests/data-LEGACY_14/startup.log
+Quahog 0.6.0 - native C - API 1.4
 Could not register native event handlers; original stage restored.
 
-Details: /tmp/quahog-native-c-051/data-LEGACY_14/startup.log
+Details: /tmp/quahog-native-c-tests/data-LEGACY_14/startup.log
 API 1.4: native prepare/cache, render, travel, return episode, pause, placement reload, fall rescue, no background reads and unload rollback passed (6 overrides).
 Expected failure: Cannot open: missing-assets-for-cache-test/assets/collision_stub.bmd
 Cache checks passed: reuse, corrupted archive repair, missing assets refusal, invalid checksum repair, no early overrides.
@@ -60,12 +57,5 @@ Mapped PE passed: 4096 bytes, COFF table at 600, under 4 KiB heap.
 Mapped PE passed: 314576896 bytes, COFF table at 314572800, under 4 KiB heap.
 Mapped PE passed: 3221229568 bytes, COFF table at 3221225472, under 4 KiB heap.
 Large-executable checks passed: >256 MiB, >2 GiB, far symbol offsets, arena transfer and error cleanup.
-
-New mapping/ownership/error cleanup under ASan+UBSan:
-Mapped PE passed: 4096 bytes, COFF table at 600, under 4 KiB heap.
-Mapped PE passed: 314576896 bytes, COFF table at 314572800, under 4 KiB heap.
-Mapped PE passed: 3221229568 bytes, COFF table at 3221225472, under 4 KiB heap.
-Large-executable checks passed: >256 MiB, >2 GiB, far symbol offsets, arena transfer and error cleanup.
-
-Windows x64 C11 build passed -Wall -Wextra -Werror.
-Windows execution and actual game playtest unavailable.
+Mach-O: Intel/ARM64, universal 32/64-bit tables, both byte orders, bounds, permissions, missing symbols, truncations and 3200 mutations passed.
+POSIX: UTF-8/spaces/backslash paths, memory update, preserved options/mode, backup, sufficient memory, in-stage refusal, symlinks/hardlinks and conflict checks passed.

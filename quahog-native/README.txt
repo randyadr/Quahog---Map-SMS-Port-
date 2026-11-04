@@ -1,10 +1,18 @@
-QUAHOG 0.5.1 - NATIVE C
+QUAHOG 0.6.0 - NATIVE C / MAC + WINDOWS
 Author: Randyadr
 
 Python is completely removed. The map preparation, cache, archive handling,
-portal placement and game plugin are compiled C11 inside quahog_native.dll.
+portal placement and game plugin are compiled C11 inside the platform's native library.
 No Python installation, Python download, bundled interpreter, pip package,
 setup EXE, internet connection or game rebuild is required.
+
+MAC SUPPORT (0.6.0)
+Includes native macos-arm64 and macos-x86_64 dylibs, plus the Windows x64 DLL.
+SMS Launcher picks the library matching the running game automatically.
+Apple Silicon games use arm64; Intel games (including Rosetta) use x86_64.
+Targets macOS 11+ on Apple Silicon and macOS 10.15+ on Intel; the game itself
+may require a newer macOS version. Use SMS Launcher's native Sunshine port.
+No Python, Wine, Terminal install script, compiler or game rebuild is needed.
 
 INSTALL / UPDATE
 1. Close the game.
@@ -52,6 +60,7 @@ CONTROLS
 F6: enter Quahog from Delfino Plaza.
 F8: return to the Plaza episode you entered from.
 F10: rescue to the Quahog entrance.
+Mac keyboards may require Fn with F1/F6/F8/F10; the Mods menu has the actions.
 Walk through the cyan portal to travel without a keyboard.
 F1 > Mods > Quahog also has Enter, Return, Place and Rescue actions.
 Travel selected in F1 takes effect when you close that menu.
@@ -71,7 +80,8 @@ They are projected native API graphics, so they can show through nearby walls.
 Preview.png is the original offline portal rendering, not an in-game screenshot.
 
 COMPATIBILITY / LIMITS
-Windows x64 Sunshine PC port with native mod API 1.x and the existing named
+Windows x64 or macOS Intel/Apple Silicon Sunshine PC port with native mod API
+1.x and the existing named
 port_dvd_read_file, port_dvd_override and port_mem1_size host symbols.
 Official compatible Sunshine/Eclipse layouts are detected from the active
 stage table. Single-player only. Game memory must be at least 512 MB.
@@ -92,23 +102,21 @@ Cache files are keyed to the original stage, stage table, common scene and
 assembler version. Corrupt/missing cache files are rebuilt. A bad build never
 activates a partial map. Original bytes are restored on unload/load failure.
 Process-owned byte buffers remain valid across F1 disable/re-enable and are
-reclaimed by Windows when the game exits.
+reclaimed by the OS when the game exits. On Mac the library keeps one process-
+lifetime reference so its archive registry survives disable/re-enable. A
+changed mod binary requires closing and restarting the game.
 
 VALIDATION
-Windows x64 DLL compiled as C11 with warnings treated as errors.
-Sparse executable tests passed at 300 MiB and 3 GiB, including COFF symbols
-located beyond 2 GiB. Each mapped file used less than 4 KiB of preparation
-heap. Mapping transfer and cleanup after parser/open failures were checked.
-C preparation matched the old Python assembler byte for byte on an authored
-stage fixture with the real Quahog assets. Hashes, scene/RARC/Yaz0 framing,
-stage indices, portal geometry, cache reuse and corruption recovery passed.
-The actual plugin's callbacks passed simulated API 1.3, 1.4 and 1.5 hosts:
-portal draw, travel, correct return episode, pause/cooldown, saved placement,
-fall rescue, unload rollback and no gameplay background file reads.
-GCC address/undefined-behavior checks passed on the authored fixtures and
-800 mutated parser inputs. See tests/last-checks.log and VALIDATION.json.
-Windows game execution, Windows file operations and Defender were not tested
-here. The DLL is unsigned. This is a test release pending your in-game check.
+The actual dylibs passed loader and plugin tests on Apple Silicon macOS 14.8.9
+and Intel macOS 15.7.9, including hidden host symbols and unload/reload.
+See VALIDATION.json and tests/macos-ci.log for details. The new Mach-O
+reader is checked against Intel/ARM64, thin/universal files, invalid sections,
+truncated tables and mutated inputs. POSIX settings tests cover UTF-8 paths,
+backups, preserved permissions and refusal of unsafe or conflicting updates.
+The C assembler still matches the reference archive byte for byte; the map
+assets are unchanged. Tests use synthetic game data and simulated native APIs.
+Real in-game play on a Mac and Windows has not been performed here.
+Mac libraries use ad-hoc signatures, not Apple Developer ID notarization.
 
 CREDITS
 Converted assets originate from the supplied Skin Selector 2.14.165 package;

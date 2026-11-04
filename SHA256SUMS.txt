@@ -1,1 +1,1 @@
-bcf27baa533429758f93acec0b35aa486f748e9b54c556692b3f5ee593e57d52  Quahog_Mod_v0.5.1_Native_C_EXE_Fix.zip
+943a625495aa15e9fbf07293af2b764d52da7d06c52d910ce0577850e087b585  Quahog_Mod_v0.6.0_Mac_Windows_Native_C.zip

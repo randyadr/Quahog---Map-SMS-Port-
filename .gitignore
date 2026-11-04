@@ -5,7 +5,7 @@
 .zig-cache/
 zig-out/
 
-# Large map binaries are restored from the included v0.5.1 install ZIP.
+# Large map binaries are restored from the included v0.6.0 install ZIP.
 quahog-native/assets/*.bmd
 quahog-native/assets/*.col
 

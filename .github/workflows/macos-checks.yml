@@ -22,7 +22,8 @@ jobs:
       - name: Restore original map assets
         run: |
           shasum -a 256 -c SHA256SUMS.txt
-          unzip -q -o Quahog_Mod_v0.5.1_Native_C_EXE_Fix.zip 'quahog-native/assets/*'
+          package=$(awk 'NF {print $2; exit}' SHA256SUMS.txt)
+          unzip -q -o "$package" 'quahog-native/assets/*'
       - name: Native C regression tests
         run: sh quahog-native/tests/run_checks.sh
       - name: Build and sign Mac libraries

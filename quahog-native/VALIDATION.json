@@ -1,5 +1,5 @@
 {
-  "version": "0.5.1",
+  "version": "0.6.0",
   "windows_x64_c11_build": "passed; warnings treated as errors",
   "source_assets_unchanged_from": "supplied Quahog v0.4.3",
   "python_or_cpp_files_in_package": 0,
@@ -20,7 +20,7 @@
     "missing_assets_prevent_activation": "passed",
     "unload_and_subscribe_failure_rollback": "passed",
     "normal_gameplay_background_file_reads": 0,
-    "address_and_undefined_behavior_sanitizers": "v0.5.0 core/runtime checks retained; v0.5.1 changed mapping and ownership paths passed ASan/UBSan. Full native regression suite rerun on v0.5.1.",
+    "address_and_undefined_behavior_sanitizers": "Linux GCC ASan/UBSan passed for new Mach-O parser and POSIX settings. LeakSanitizer disabled due sandbox restrictions.",
     "large_executable_mapping": {
       "file_sizes_bytes": [
         4096,
@@ -38,14 +38,50 @@
       "map_ownership_transfer": "passed",
       "failed_parse_and_open_cleanup": "passed",
       "asan_ubsan": "passed; LeakSanitizer disabled due sandbox restrictions"
-    }
+    },
+    "macho_parser": "passed: Intel/ARM64, thin/universal 32/64-bit headers, both fat byte orders, 3200 mutations, bounds/section/permission validation",
+    "posix_settings": "passed on Linux, macOS arm64 and macOS x86_64"
   },
   "limits": [
-    "No real game/ISO playtest",
+    "No real game/ISO playtest on either OS",
     "Windows runtime/file operations not executed",
     "Defender not tested",
-    "Unsigned DLL"
+    "Windows DLL unsigned; Mac dylibs ad-hoc signed, not Developer ID notarized"
   ],
   "notes": "Test fixture data is authored, not extracted retail game content. The compiled DLL and all mod/preparation logic are C11.",
-  "fix": "Do not send the game EXE through the 256 MiB asset reader. Use a read-only mapped view with 64-bit size and automatic error cleanup."
+  "fix": "Native macOS C host support, Mach-O/ASLR/UUID validation, POSIX settings and path handling; Windows large-EXE fix retained.",
+  "macos": {
+    "arm64": {
+      "os": "macOS 14.8.9",
+      "native_build": "passed",
+      "codesign_verify_strict": "passed",
+      "full_native_regression_suite": "passed",
+      "actual_dylib_loader_test": "passed"
+    },
+    "x86_64": {
+      "os": "macOS 15.7.9",
+      "native_build": "passed",
+      "codesign_verify_strict": "passed",
+      "full_native_regression_suite": "passed",
+      "actual_dylib_loader_test": "passed"
+    },
+    "actual_dylib_test_cases": [
+      "mock API 1.3, 1.4 and 1.5",
+      "direct exported symbols",
+      "hidden symbols resolved from real Mach-O executable",
+      "correct archive assembly",
+      "portal draw and travel",
+      "pause, placement save and return episode",
+      "fall rescue",
+      "no ordinary gameplay file reads",
+      "unsubscribe and override rollback",
+      "dlclose/reload and same retained buffer pointer"
+    ],
+    "workflow_run": "https://github.com/randyadr/Quahog---Map-SMS-Port-/actions/runs/41762498460",
+    "tested_source_commit": "d5c3b3fcfd8609a3e4eb7de81ae81262371bb317",
+    "artifacts_sha256": {
+      "macos-arm64": "c6fcf721f1ad3fdf57c623c4b138f3a948a6d48711182bf891fd8a2e98af0faf",
+      "macos-x86_64": "9f47bba7d98ffdb38836f75a472376ac710fa65f5cfcad2006b3e765aab8f1d2"
+    }
+  }
 }

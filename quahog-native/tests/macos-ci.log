@@ -1,0 +1,49 @@
+GitHub Actions native macOS validation
+Run: https://github.com/randyadr/Quahog---Map-SMS-Port-/actions/runs/41762498460
+Source commit: d5c3b3fcfd8609a3e4eb7de81ae81262371bb317
+Both jobs passed. These are mock hosts with synthetic game files, not a game playtest.
+
+Apple Silicon / macOS 14.8.9
+2026-11-04T02:42:45.8637710Z C archive matches original assembler byte-for-byte: eba9820614a5e9ec6c44e966994354bdd73352e04ae1fcf97563568a6b2daaa0
+2026-11-04T02:42:45.8644280Z Core checks passed: hashes, settings, scene framing, stage indices, Yaz0, RARC, market geometry, 800 mutated inputs.
+2026-11-04T02:42:48.9223970Z API 1.5: native prepare/cache, render, travel, return episode, pause, placement reload, fall rescue, no background reads and unload rollback passed (6 overrides).
+2026-11-04T02:42:51.7585550Z API 1.3: native prepare/cache, render, travel, return episode, pause, placement reload, fall rescue, no background reads and unload rollback passed (6 overrides).
+2026-11-04T02:42:54.6989010Z API 1.4: native prepare/cache, render, travel, return episode, pause, placement reload, fall rescue, no background reads and unload rollback passed (6 overrides).
+2026-11-04T02:43:02.0947050Z Cache checks passed: reuse, corrupted archive repair, missing assets refusal, invalid checksum repair, no early overrides.
+2026-11-04T02:43:02.6119310Z Mapped PE passed: 4096 bytes, COFF table at 600, under 4 KiB heap.
+2026-11-04T02:43:02.6120710Z Mapped PE passed: 314576896 bytes, COFF table at 314572800, under 4 KiB heap.
+2026-11-04T02:43:02.6121980Z Mapped PE passed: 3221229568 bytes, COFF table at 3221225472, under 4 KiB heap.
+2026-11-04T02:43:02.6124890Z Large-executable checks passed: >256 MiB, >2 GiB, far symbol offsets, arena transfer and error cleanup.
+2026-11-04T02:43:02.8003760Z Mach-O: Intel/ARM64, universal 32/64-bit tables, both byte orders, bounds, permissions, missing symbols, truncations and 3200 mutations passed.
+2026-11-04T02:43:03.3081100Z POSIX: UTF-8/spaces/backslash paths, memory update, preserved options/mode, backup, sufficient memory, in-stage refusal, symlinks/hardlinks and conflict checks passed.
+2026-11-04T02:43:03.9620090Z bin/macos-arm64/quahog_native.dylib: replacing existing signature
+2026-11-04T02:43:07.2170410Z API 1.5: native prepare/cache, render, travel, return episode, pause, placement reload, fall rescue, no background reads and unload rollback passed (6 overrides).
+2026-11-04T02:43:09.6440490Z API 1.5: native prepare/cache, render, travel, return episode, pause, placement reload, fall rescue, no background reads and unload rollback passed (6 overrides).
+2026-11-04T02:43:12.1163020Z API 1.3: native prepare/cache, render, travel, return episode, pause, placement reload, fall rescue, no background reads and unload rollback passed (6 overrides).
+2026-11-04T02:43:14.6923610Z API 1.3: native prepare/cache, render, travel, return episode, pause, placement reload, fall rescue, no background reads and unload rollback passed (6 overrides).
+2026-11-04T02:43:17.1048450Z API 1.4: native prepare/cache, render, travel, return episode, pause, placement reload, fall rescue, no background reads and unload rollback passed (6 overrides).
+2026-11-04T02:43:19.6666390Z API 1.4: native prepare/cache, render, travel, return episode, pause, placement reload, fall rescue, no background reads and unload rollback passed (6 overrides).
+2026-11-04T02:43:19.6682590Z Actual macOS arm64 dylib: direct exports, Mach-O fallback and unload/reload passed.
+
+Intel / macOS 15.7.9
+2026-11-04T02:42:55.5979780Z C archive matches original assembler byte-for-byte: eba9820614a5e9ec6c44e966994354bdd73352e04ae1fcf97563568a6b2daaa0
+2026-11-04T02:42:55.6088600Z Core checks passed: hashes, settings, scene framing, stage indices, Yaz0, RARC, market geometry, 800 mutated inputs.
+2026-11-04T02:42:59.5096040Z API 1.5: native prepare/cache, render, travel, return episode, pause, placement reload, fall rescue, no background reads and unload rollback passed (6 overrides).
+2026-11-04T02:43:03.2447490Z API 1.3: native prepare/cache, render, travel, return episode, pause, placement reload, fall rescue, no background reads and unload rollback passed (6 overrides).
+2026-11-04T02:43:06.6048970Z API 1.4: native prepare/cache, render, travel, return episode, pause, placement reload, fall rescue, no background reads and unload rollback passed (6 overrides).
+2026-11-04T02:43:12.9977680Z Cache checks passed: reuse, corrupted archive repair, missing assets refusal, invalid checksum repair, no early overrides.
+2026-11-04T02:43:14.0612500Z Mapped PE passed: 4096 bytes, COFF table at 600, under 4 KiB heap.
+2026-11-04T02:43:14.0613690Z Mapped PE passed: 314576896 bytes, COFF table at 314572800, under 4 KiB heap.
+2026-11-04T02:43:14.0616210Z Mapped PE passed: 3221229568 bytes, COFF table at 3221225472, under 4 KiB heap.
+2026-11-04T02:43:14.0617820Z Large-executable checks passed: >256 MiB, >2 GiB, far symbol offsets, arena transfer and error cleanup.
+2026-11-04T02:43:14.4723530Z Mach-O: Intel/ARM64, universal 32/64-bit tables, both byte orders, bounds, permissions, missing symbols, truncations and 3200 mutations passed.
+2026-11-04T02:43:15.5069750Z POSIX: UTF-8/spaces/backslash paths, memory update, preserved options/mode, backup, sufficient memory, in-stage refusal, symlinks/hardlinks and conflict checks passed.
+2026-11-04T02:43:17.1890660Z bin/macos-arm64/quahog_native.dylib: replacing existing signature
+2026-11-04T02:43:21.0284090Z API 1.5: native prepare/cache, render, travel, return episode, pause, placement reload, fall rescue, no background reads and unload rollback passed (6 overrides).
+2026-11-04T02:43:24.1005680Z API 1.5: native prepare/cache, render, travel, return episode, pause, placement reload, fall rescue, no background reads and unload rollback passed (6 overrides).
+2026-11-04T02:43:27.0699480Z API 1.3: native prepare/cache, render, travel, return episode, pause, placement reload, fall rescue, no background reads and unload rollback passed (6 overrides).
+2026-11-04T02:43:29.9693460Z API 1.3: native prepare/cache, render, travel, return episode, pause, placement reload, fall rescue, no background reads and unload rollback passed (6 overrides).
+2026-11-04T02:43:32.4978860Z API 1.4: native prepare/cache, render, travel, return episode, pause, placement reload, fall rescue, no background reads and unload rollback passed (6 overrides).
+2026-11-04T02:43:34.5516170Z API 1.4: native prepare/cache, render, travel, return episode, pause, placement reload, fall rescue, no background reads and unload rollback passed (6 overrides).
+2026-11-04T02:43:34.5603040Z Actual macOS x86_64 dylib: direct exports, Mach-O fallback and unload/reload passed.
+

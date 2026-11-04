@@ -1,3 +1,15 @@
+0.6.0 - Native Mac support
+- Added native Apple Silicon and Intel macOS libraries alongside Windows x64.
+- Resolve game functions through dyld, with validated Mach-O symbol fallback
+  for unstripped thin/universal executables and ASLR-safe addresses.
+- Match the on-disk build UUID before using fallback symbol addresses.
+- Added native POSIX memory-setting backup/update and Mac path handling.
+- Keep the archive registry alive across F1 disable/re-enable on Mac.
+- Added Mac source build script, actual dylib loader tests, Mach-O fixtures,
+  malformed-input checks and POSIX settings regression tests.
+- No Python/runtime downloads, helper processes, or gameplay background scans.
+- Map assets and controls are unchanged.
+
 0.5.1 - Large executable compatibility
 - Fixed "Invalid file size" when reading a large Skin Selector game EXE.
 - Use read-only mapped executable metadata with GetFileSizeEx on Windows,
